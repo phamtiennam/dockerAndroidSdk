@@ -1,7 +1,6 @@
 # dockerAndroidSdk
 
-Description:
-  To build a docker for Android SDK from scratch
+Description: To build a docker for Android SDK from scratch
   
 Host: Ubuntu 16.04  
 
