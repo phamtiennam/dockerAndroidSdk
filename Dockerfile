@@ -23,16 +23,22 @@ RUN mkdir -p /opt/android-sdk && cd /opt/android-sdk && \
     unzip *tools*linux*.zip && \
     rm *tools*linux*.zip
 
+# install java
+RUN apt-get install -y software-properties-common && \
+    add-apt-repository ppa:webupd8team/java && \
+    apt-get update && \
+    echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
+    apt-get install -y oracle-java8-installer && \
+    add-apt-repository --remove ppa:webupd8team/java
+
 # set the environment variables
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV ANDROID_HOME /opt/android-sdk
 ENV PATH ${PATH}:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin
 #ENV _JAVA_OPTIONS -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 
-# accept the license agreements of the SDK components
-#ADD license_accepter.sh /opt/
-#RUN /opt/license_accepter.sh $ANDROID_HOME
+# accept All the license agreements of the SDK components
+RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
 
 # setup adb server
 EXPOSE 2802
-
